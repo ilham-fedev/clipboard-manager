@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set Shortcut</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      color: #cccccc;
+      background: #1e1e1e;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .hint {
+      color: #858585;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    #shortcut-input {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      color: #ffffff;
+      background: #252526;
+      border: 2px solid #0078d4;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    #shortcut-input:focus {
+      border-color: #f14c4c;
+      background: #2d2d30;
+    }
+
+    #shortcut-input::placeholder {
+      color: #858585;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 20px;
+      font-size: 13px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #btn-save {
+      background: #0078d4;
+      color: white;
+    }
+
+    #btn-save:hover {
+      background: #1084d8;
+    }
+
+    #btn-save:disabled {
+      background: #3c3c3c;
+      color: #858585;
+      cursor: not-allowed;
+    }
+
+    #btn-cancel {
+      background: #3c3c3c;
+      color: #cccccc;
+    }
+
+    #btn-cancel:hover {
+      background: #4c4c4c;
+    }
+
+    #error {
+      color: #f14c4c;
+      font-size: 12px;
+      margin-top: 10px;
+      min-height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Set Keyboard Shortcut</h2>
+    <p class="hint">Click the box and press your desired keys</p>
+    <input
+      type="text"
+      id="shortcut-input"
+      placeholder="Click here, then press keys..."
+      readonly
+    >
+    <div class="buttons">
+      <button id="btn-cancel" type="button">Cancel</button>
+      <button id="btn-save" type="button" disabled>Save</button>
+    </div>
+    <p id="error"></p>
+  </div>
+
+  <script>
+    const shortcutInput = document.getElementById('shortcut-input');
+    const btnSave = document.getElementById('btn-save');
+    const btnCancel = document.getElementById('btn-cancel');
+    const errorEl = document.getElementById('error');
+
+    let currentAccelerator = null;
+
+    function keyToAccelerator(e) {
+      const parts = [];
+
+      if (e.metaKey) parts.push('CommandOrControl');
+      if (e.ctrlKey && !e.metaKey) parts.push('Control');
+      if (e.altKey) parts.push('Option');
+      if (e.shiftKey) parts.push('Shift');
+
+      let key = e.key;
+
+      if (['Meta', 'Control', 'Alt', 'Shift'].includes(key)) {
+        return null;
+      }
+
+      if (key === ' ') key = 'Space';
+      else if (key === 'ArrowUp') key = 'Up';
+      else if (key === 'ArrowDown') key = 'Down';
+      else if (key === 'ArrowLeft') key = 'Left';
+      else if (key === 'ArrowRight') key = 'Right';
+      else if (key.length === 1) key = key.toUpperCase();
+
+      parts.push(key);
+      return parts.join('+');
+    }
+
+    function toDisplayFormat(acc) {
+      return acc
+        .replace(/CommandOrControl/g, '⌘')
+        .replace(/Control/g, '⌃')
+        .replace(/Option/g, '⌥')
+        .replace(/Shift/g, '⇧')
+        .replace(/\+/g, ' ');
+    }
+
+    shortcutInput.addEventListener('keydown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const acc = keyToAccelerator(e);
+      if (!acc) return;
+
+      if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+        errorEl.textContent = 'Must include ⌘, ⌃, or ⌥';
+        return;
+      }
+
+      currentAccelerator = acc;
+      shortcutInput.value = toDisplayFormat(acc);
+      btnSave.disabled = false;
+      errorEl.textContent = '';
+    });
+
+    btnSave.addEventListener('click', async function(e) {
+      e.preventDefault();
+      if (!currentAccelerator) return;
+
+      try {
+        const result = await window.shortcutAPI.saveShortcut(currentAccelerator);
+        if (result.success) {
+          window.shortcutAPI.closeWindow();
+        } else {
+          errorEl.textContent = result.error || 'Failed to save';
+        }
+      } catch (err) {
+        errorEl.textContent = 'Error: ' + err.message;
+      }
+    });
+
+    btnCancel.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.shortcutAPI.closeWindow();
+    });
+
+    // Load current shortcut on start
+    window.shortcutAPI.getCurrentShortcut().then(acc => {
+      if (acc) {
+        currentAccelerator = acc;
+        shortcutInput.value = toDisplayFormat(acc);
+        btnSave.disabled = false;
+      }
+    });
+
+    // Focus input on load
+    setTimeout(() => shortcutInput.focus(), 100);
+  </script>
+</body>
+</html>
