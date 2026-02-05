@@ -8,7 +8,7 @@ const emptyState = document.getElementById('empty-state');
 let clipboardHistory = [];
 let filteredHistory = [];
 let selectedIndex = 0;
-let settings = { deleteKey: 'Delete' };
+let settings = { deleteKey: 'Backspace' };
 
 // Initialize
 async function init() {

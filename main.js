@@ -18,7 +18,7 @@ const store = new Store({
     clipboardHistory: [],
     settings: {
       maxHistorySize: 50,
-      deleteKey: 'Delete', // or 'Backspace'
+      deleteKey: 'Backspace', // Mac: 'Backspace' = Delete key (⌫), 'Delete' = Fn+Delete
       pasteShortcut: 'CommandOrControl+Shift+V'
     }
   }
@@ -208,7 +208,7 @@ function updateTrayMenu() {
     },
     {
       label: 'History Size',
-      submenu: [10, 25, 50, 100, 200, 500].map(size => ({
+      submenu: [10, 25, 50, 100, 200, 500, 1000].map(size => ({
         label: `${size} items`,
         type: 'radio',
         checked: settings.maxHistorySize === size,
@@ -221,15 +221,26 @@ function updateTrayMenu() {
     },
     {
       label: 'Delete Key',
-      submenu: ['Delete', 'Backspace'].map(key => ({
-        label: key,
-        type: 'radio',
-        checked: settings.deleteKey === key,
-        click: () => {
-          settings.deleteKey = key;
-          store.set('settings', settings);
+      submenu: [
+        {
+          label: 'Delete (⌫)',
+          type: 'radio',
+          checked: settings.deleteKey === 'Backspace',
+          click: () => {
+            settings.deleteKey = 'Backspace';
+            store.set('settings', settings);
+          }
+        },
+        {
+          label: 'Fn+Delete',
+          type: 'radio',
+          checked: settings.deleteKey === 'Delete',
+          click: () => {
+            settings.deleteKey = 'Delete';
+            store.set('settings', settings);
+          }
         }
-      }))
+      ]
     },
     { type: 'separator' },
     {
