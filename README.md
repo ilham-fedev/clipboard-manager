@@ -97,37 +97,53 @@ Preload Scripts
 
 ## FAQ
 
-**What happens when the history reaches the limit?**
+<details>
+<summary><strong>What happens when the history reaches the limit?</strong></summary>
 
-The oldest items are automatically removed to make room for new ones. New copies are added to the top, and when the limit is exceeded, the oldest entry at the bottom is discarded.
+> The oldest items are automatically removed to make room for new ones. New copies are added to the top, and when the limit is exceeded, the oldest entry at the bottom is discarded.
+</details>
 
-**Where is my clipboard data stored?**
+<details>
+<summary><strong>Where is my clipboard data stored?</strong></summary>
 
-Data is stored locally in `~/Library/Application Support/clipboard-manager/` using electron-store. Your clipboard history persists between app restarts.
+> Data is stored locally in `~/Library/Application Support/clipboard-manager/` using electron-store. Your clipboard history persists between app restarts.
+</details>
 
-**Does it support images or files?**
+<details>
+<summary><strong>Does it support images or files?</strong></summary>
 
-Currently, only text content is supported. Images, files, and other non-text clipboard content are not captured.
+> Currently, only text content is supported. Images, files, and other non-text clipboard content are not captured.
+</details>
 
-**How often does it check the clipboard?**
+<details>
+<summary><strong>How often does it check the clipboard?</strong></summary>
 
-The app polls the clipboard every 500 milliseconds (0.5 seconds) for changes.
+> The app polls the clipboard every 500 milliseconds (0.5 seconds) for changes.
+</details>
 
-**What happens if I copy the same text twice?**
+<details>
+<summary><strong>What happens if I copy the same text twice?</strong></summary>
 
-Duplicate entries are not added. If the text already exists in your history, it won't create a new entry.
+> Duplicate entries are not added. If the text already exists in your history, it won't create a new entry.
+</details>
 
-**Does it work in fullscreen applications?**
+<details>
+<summary><strong>Does it work in fullscreen applications?</strong></summary>
 
-Yes, the clipboard history window appears on all workspaces and desktops, including fullscreen apps.
+> Yes, the clipboard history window appears on all workspaces and desktops, including fullscreen apps.
+</details>
 
-**How do I change the keyboard shortcut?**
+<details>
+<summary><strong>How do I change the keyboard shortcut?</strong></summary>
 
-Right-click the menu bar icon and select "Change Shortcut...". Press your desired key combination (must include a modifier key like Cmd, Ctrl, or Option).
+> Right-click the menu bar icon and select "Change Shortcut...". Press your desired key combination (must include a modifier key like Cmd, Ctrl, or Option).
+</details>
 
-**Why isn't the Delete key working?**
+<details>
+<summary><strong>Why isn't the Delete key working?</strong></summary>
 
-On Mac, the Delete key (⌫) sends a "Backspace" event. Make sure "Delete (⌫)" is selected in Settings > Delete Key. If you want to use Fn+Delete instead, select that option.
+> On Mac, the Delete key (⌫) sends a "Backspace" event. Make sure "Delete (⌫)" is selected in Settings > Delete Key. If you want to use Fn+Delete instead, select that option.
+</details>
 
 ## Privacy
 
