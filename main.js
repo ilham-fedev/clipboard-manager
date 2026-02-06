@@ -261,7 +261,7 @@ function updateTrayMenu() {
         },
         {
           label: 'GitHub',
-          click: () => shell.openExternal('https://github.com/ilham-fedev')
+          click: () => shell.openExternal('https://github.com/ilham-fedev/clipboard-manager?tab=readme-ov-file#clipboard-manager')
         }
       ]
     },
