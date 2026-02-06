@@ -7,7 +7,8 @@ const {
   Tray,
   Menu,
   nativeImage,
-  screen
+  screen,
+  shell
 } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
@@ -249,6 +250,20 @@ function updateTrayMenu() {
         clipboardHistory = [];
         store.set('clipboardHistory', clipboardHistory);
       }
+    },
+    { type: 'separator' },
+    {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'Contact',
+          click: () => shell.openExternal('mailto:ilham.hady@gmail.com')
+        },
+        {
+          label: 'GitHub',
+          click: () => shell.openExternal('https://github.com/ilham-fedev')
+        }
+      ]
     },
     { type: 'separator' },
     {
