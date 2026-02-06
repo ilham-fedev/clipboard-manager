@@ -11,6 +11,7 @@ A lightweight, native macOS clipboard history manager built with Electron. Quick
 - **Keyboard Navigation** - Navigate with arrow keys, Enter to paste, Escape to close
 - **Menu Bar App** - Lives in your menu bar, always accessible
 - **Customizable** - Configure history size, delete key, and keyboard shortcut
+- **Light & Dark Mode** - Automatically follows macOS system appearance
 
 ## Why I Built This
 
