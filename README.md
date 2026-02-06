@@ -12,6 +12,12 @@ A lightweight, native macOS clipboard history manager built with Electron. Quick
 - **Menu Bar App** - Lives in your menu bar, always accessible
 - **Customizable** - Configure history size, delete key, and keyboard shortcut
 
+## Why I Built This
+
+This application was born out of necessity. As a WordPress support specialist, I deal with a heavy load of copy-paste actions every day — SSH credentials, error logs, outdated plugin and theme lists for audit reports, and countless other snippets of text.
+
+I was inspired by [Pastebot](https://tapbots.com/pastebot/) for Mac, but wanted a free alternative that I could share with my colleagues to make their workflow easier too.
+
 ## Installation
 
 ### From Source
