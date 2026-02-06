@@ -39,6 +39,9 @@ yarn-error.log*
 .env.local
 .env.*.local
 
+# Claude Code
+CLAUDE*
+
 # Misc
 .cache/
 *.tgz
