@@ -95,6 +95,40 @@ Preload Scripts
 └── shortcut-preload.js - Settings window API bridge
 ```
 
+## FAQ
+
+**What happens when the history reaches the limit?**
+
+The oldest items are automatically removed to make room for new ones. New copies are added to the top, and when the limit is exceeded, the oldest entry at the bottom is discarded.
+
+**Where is my clipboard data stored?**
+
+Data is stored locally in `~/Library/Application Support/clipboard-manager/` using electron-store. Your clipboard history persists between app restarts.
+
+**Does it support images or files?**
+
+Currently, only text content is supported. Images, files, and other non-text clipboard content are not captured.
+
+**How often does it check the clipboard?**
+
+The app polls the clipboard every 500 milliseconds (0.5 seconds) for changes.
+
+**What happens if I copy the same text twice?**
+
+Duplicate entries are not added. If the text already exists in your history, it won't create a new entry.
+
+**Does it work in fullscreen applications?**
+
+Yes, the clipboard history window appears on all workspaces and desktops, including fullscreen apps.
+
+**How do I change the keyboard shortcut?**
+
+Right-click the menu bar icon and select "Change Shortcut...". Press your desired key combination (must include a modifier key like Cmd, Ctrl, or Option).
+
+**Why isn't the Delete key working?**
+
+On Mac, the Delete key (⌫) sends a "Backspace" event. Make sure "Delete (⌫)" is selected in Settings > Delete Key. If you want to use Fn+Delete instead, select that option.
+
 ## Privacy
 
 - All clipboard data is stored locally on your machine
