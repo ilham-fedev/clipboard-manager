@@ -7,6 +7,7 @@ const {
   Tray,
   Menu,
   nativeImage,
+  nativeTheme,
   screen,
   shell
 } = require('electron');
@@ -150,6 +151,7 @@ function showShortcutWindow() {
     titleBarStyle: 'hidden',
     alwaysOnTop: true,
     resizable: false,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#1e1e1e' : '#ffffff',
     webPreferences: {
       preload: path.join(__dirname, 'shortcut-preload.js'),
       contextIsolation: true,

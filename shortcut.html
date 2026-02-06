@@ -109,6 +109,48 @@
       margin-top: 10px;
       min-height: 16px;
     }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        color: #1d1d1f;
+        background: #ffffff;
+      }
+
+      .hint {
+        color: #86868b;
+      }
+
+      #shortcut-input {
+        color: #1d1d1f;
+        background: #f5f5f5;
+      }
+
+      #shortcut-input:focus {
+        background: #eeeeee;
+      }
+
+      #shortcut-input::placeholder {
+        color: #86868b;
+      }
+
+      #btn-save:disabled {
+        background: #d1d1d1;
+        color: #86868b;
+      }
+
+      #btn-cancel {
+        background: #e8e8e8;
+        color: #1d1d1f;
+      }
+
+      #btn-cancel:hover {
+        background: #d1d1d1;
+      }
+
+      #error {
+        color: #ff3b30;
+      }
+    }
   </style>
 </head>
 <body>
