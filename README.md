@@ -10,6 +10,9 @@ A lightweight, native macOS clipboard history manager built with Electron. Quick
 - **Quick Paste** - Click or press Enter to paste and return to your app
 - **Keyboard Navigation** - Navigate with arrow keys, Enter to paste, Escape to close
 - **Menu Bar App** - Lives in your menu bar, always accessible
+- **Pin/Favorite Items** - Pin frequently used snippets to the top of the list
+- **Smart Duplicates** - Re-copying text moves it to the top instead of ignoring it
+- **Launch at Login** - Optional auto-start on macOS login
 - **Customizable** - Configure history size, delete key, and keyboard shortcut
 - **Light & Dark Mode** - Automatically follows macOS system appearance
 
@@ -60,6 +63,7 @@ This creates a `.dmg` and `.zip` in the `dist` folder that you can install.
 | `↑` / `↓` | Navigate items |
 | `Enter` | Paste selected item |
 | `Escape` | Close window |
+| `P` | Pin/unpin selected item |
 | `Delete` (⌫) | Delete selected item (configurable) |
 
 ### Settings
@@ -69,6 +73,7 @@ Right-click the menu bar icon to access settings:
 - **History Size** - Choose from 10, 25, 50, 100, 200, 500, or 1000 items
 - **Delete Key** - Use Delete (⌫) or Fn+Delete to remove items
 - **Keyboard Shortcut** - Customize the global shortcut
+- **Launch at Login** - Auto-start app on macOS login
 - **Clear History** - Remove all saved clipboard items
 
 ## Requirements
@@ -131,7 +136,7 @@ Preload Scripts
 <details>
 <summary><strong>What happens if I copy the same text twice?</strong></summary>
 
-> Duplicate entries are not added. If the text already exists in your history, it won't create a new entry.
+> The existing entry is moved to the top of the list with an updated timestamp. If the item was pinned, it stays pinned.
 </details>
 
 <details>

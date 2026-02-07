@@ -13,6 +13,9 @@ contextBridge.exposeInMainWorld('clipboardAPI', {
   // Delete an item
   deleteItem: (id) => ipcRenderer.invoke('delete-item', id),
 
+  // Toggle pin on an item
+  togglePin: (id) => ipcRenderer.invoke('toggle-pin', id),
+
   // Close window
   closeWindow: () => ipcRenderer.invoke('close-window'),
 

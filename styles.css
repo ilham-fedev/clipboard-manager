@@ -163,7 +163,7 @@ body {
   line-height: 1.4;
   color: var(--text-primary);
   word-break: break-word;
-  padding-right: 30px;
+  padding-right: 60px;
 }
 
 .item-info {
@@ -178,11 +178,59 @@ body {
   color: var(--text-secondary);
 }
 
-.delete-btn {
+/* Pinned item indicator */
+.history-item.pinned {
+  border-left: 3px solid var(--accent-color);
+  padding-left: 11px;
+}
+
+/* Action buttons container */
+.item-actions {
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.history-item:hover .item-actions {
+  opacity: 1;
+}
+
+/* Keep actions visible when item is pinned (to show active pin) */
+.history-item.pinned .item-actions {
+  opacity: 1;
+}
+
+/* Pin button */
+.pin-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 14px;
+}
+
+.pin-btn.active {
+  background: rgba(0, 120, 212, 0.15);
+}
+
+.pin-btn:hover {
+  background: var(--accent-color);
+}
+
+/* Delete button */
+.delete-btn {
   width: 28px;
   height: 28px;
   display: flex;
@@ -193,13 +241,8 @@ body {
   border-radius: 4px;
   color: var(--text-secondary);
   cursor: pointer;
-  opacity: 0;
   transition: all 0.15s;
   font-size: 14px;
-}
-
-.history-item:hover .delete-btn {
-  opacity: 1;
 }
 
 .delete-btn:hover {

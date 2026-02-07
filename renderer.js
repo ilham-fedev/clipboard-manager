@@ -42,6 +42,13 @@ function filterAndRender() {
     filteredHistory = [...clipboardHistory];
   }
 
+  // Sort pinned items first, preserving order within each group
+  filteredHistory.sort((a, b) => {
+    const aPinned = a.pinned ? 1 : 0;
+    const bPinned = b.pinned ? 1 : 0;
+    return bPinned - aPinned;
+  });
+
   // Reset selection to first item
   selectedIndex = 0;
 
@@ -66,7 +73,7 @@ function render() {
   // Render items
   filteredHistory.forEach((item, index) => {
     const li = document.createElement('li');
-    li.className = `history-item ${index === selectedIndex ? 'selected' : ''}`;
+    li.className = `history-item ${index === selectedIndex ? 'selected' : ''}${item.pinned ? ' pinned' : ''}`;
     li.dataset.index = index;
     li.dataset.id = item.id;
 
@@ -80,6 +87,16 @@ function render() {
     time.className = 'item-time';
     time.textContent = formatTime(item.timestamp);
 
+    // Pin button
+    const pinBtn = document.createElement('button');
+    pinBtn.className = `pin-btn${item.pinned ? ' active' : ''}`;
+    pinBtn.innerHTML = '&#128204;'; // 📌
+    pinBtn.title = item.pinned ? 'Unpin item' : 'Pin item';
+    pinBtn.onclick = (e) => {
+      e.stopPropagation();
+      togglePin(item.id);
+    };
+
     // Delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
@@ -90,14 +107,20 @@ function render() {
       deleteItem(item.id);
     };
 
+    // Action buttons container (absolutely positioned right side)
+    const actions = document.createElement('div');
+    actions.className = 'item-actions';
+    actions.appendChild(pinBtn);
+    actions.appendChild(deleteBtn);
+
     // Info container
     const info = document.createElement('div');
     info.className = 'item-info';
     info.appendChild(time);
-    info.appendChild(deleteBtn);
 
     li.appendChild(content);
     li.appendChild(info);
+    li.appendChild(actions);
 
     // Click to paste
     li.onclick = () => pasteItem(index);
@@ -172,6 +195,13 @@ async function deleteItem(id) {
   filterAndRender();
 }
 
+// Toggle pin on item
+async function togglePin(id) {
+  const newHistory = await window.clipboardAPI.togglePin(id);
+  clipboardHistory = newHistory;
+  filterAndRender();
+}
+
 // Keyboard event handler
 document.addEventListener('keydown', (e) => {
   switch (e.key) {
@@ -203,6 +233,18 @@ document.addEventListener('keydown', (e) => {
         const item = filteredHistory[selectedIndex];
         if (item) {
           deleteItem(item.id);
+        }
+      }
+      break;
+
+    case 'p':
+    case 'P':
+      // Toggle pin when search is empty
+      if (searchInput.value === '' && filteredHistory.length > 0) {
+        e.preventDefault();
+        const item = filteredHistory[selectedIndex];
+        if (item) {
+          togglePin(item.id);
         }
       }
       break;

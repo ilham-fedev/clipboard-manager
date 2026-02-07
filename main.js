@@ -245,6 +245,14 @@ function updateTrayMenu() {
         }
       ]
     },
+    {
+      label: 'Launch at Login',
+      type: 'checkbox',
+      checked: app.getLoginItemSettings().openAtLogin,
+      click: (menuItem) => {
+        app.setLoginItemSettings({ openAtLogin: menuItem.checked });
+      }
+    },
     { type: 'separator' },
     {
       label: 'Clear History',
@@ -280,7 +288,10 @@ function updateTrayMenu() {
 function trimHistory() {
   const maxSize = store.get('settings.maxHistorySize');
   if (clipboardHistory.length > maxSize) {
-    clipboardHistory = clipboardHistory.slice(0, maxSize);
+    // Only trim unpinned items — pinned items are preserved
+    const pinned = clipboardHistory.filter(item => item.pinned);
+    const unpinned = clipboardHistory.filter(item => !item.pinned);
+    clipboardHistory = [...pinned, ...unpinned].slice(0, Math.max(maxSize, pinned.length));
     store.set('clipboardHistory', clipboardHistory);
   }
 }
@@ -296,23 +307,29 @@ function startClipboardWatcher() {
     if (currentContent && currentContent !== lastClipboardContent) {
       lastClipboardContent = currentContent;
 
-      // Check for duplicates in history
-      const isDuplicate = clipboardHistory.some(item => item.content === currentContent);
+      // Check for duplicates in history - move to top if found
+      const existingIndex = clipboardHistory.findIndex(item => item.content === currentContent);
+      let pinned = false;
 
-      if (!isDuplicate) {
-        // Add to beginning of history
-        clipboardHistory.unshift({
-          id: Date.now(),
-          content: currentContent,
-          timestamp: new Date().toISOString()
-        });
-
-        // Trim history if needed
-        trimHistory();
-
-        // Save to store
-        store.set('clipboardHistory', clipboardHistory);
+      if (existingIndex !== -1) {
+        // Preserve pinned status from existing item
+        pinned = clipboardHistory[existingIndex].pinned || false;
+        clipboardHistory.splice(existingIndex, 1);
       }
+
+      // Add to beginning of history
+      clipboardHistory.unshift({
+        id: Date.now(),
+        content: currentContent,
+        timestamp: new Date().toISOString(),
+        pinned: pinned
+      });
+
+      // Trim history if needed
+      trimHistory();
+
+      // Save to store
+      store.set('clipboardHistory', clipboardHistory);
     }
   }, 500);
 }
@@ -394,6 +411,15 @@ ipcMain.handle('paste-item', async (event, content) => {
 ipcMain.handle('delete-item', (event, id) => {
   clipboardHistory = clipboardHistory.filter(item => item.id !== id);
   store.set('clipboardHistory', clipboardHistory);
+  return clipboardHistory;
+});
+
+ipcMain.handle('toggle-pin', (event, id) => {
+  const item = clipboardHistory.find(item => item.id === id);
+  if (item) {
+    item.pinned = !item.pinned;
+    store.set('clipboardHistory', clipboardHistory);
+  }
   return clipboardHistory;
 });
 
