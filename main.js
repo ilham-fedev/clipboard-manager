@@ -119,6 +119,9 @@ function showWindow() {
     // Set position first, then show
     mainWindow.setPosition(newX, newY);
 
+    // Re-apply visible on all workspaces so window appears on current desktop
+    mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+
     mainWindow.webContents.send('update-history', clipboardHistory);
     mainWindow.webContents.send('update-settings', store.get('settings'));
     mainWindow.show();

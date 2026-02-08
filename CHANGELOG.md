@@ -2,6 +2,14 @@
 
 All notable changes to Clipboard Manager will be documented in this file.
 
+## [1.1.1] - 2026-02-08
+
+### Added
+- **Custom App Icon** - Replace default Electron icon with a proper clipboard manager icon
+
+### Fixed
+- Clipboard window now correctly appears on the current desktop when switching between spaces
+
 ## [1.1.0] - 2026-02-07
 
 ### Added
